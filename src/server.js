@@ -14,9 +14,9 @@ app.get('/notes', (req, res) => {
 });//повертає всі нотатки
 
 
-app.get('/notes/:noteID', (req, res) => {
-  const { noteID } = req.params;
-  res.status(200).json({message: `Retrieved note with ID: ${noteID} `});
+app.get('/notes/:noteId', (req, res) => {
+  const { noteId } = req.params;
+  res.status(200).json({message: `Retrieved note with Id: ${noteId} `});
 });//повертає одну нотатку
 
 app.get('/test-error', () => {
