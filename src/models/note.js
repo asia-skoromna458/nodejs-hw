@@ -24,4 +24,4 @@ const notesSchema = new Schema({
     versionKey: false
   }
 );
-export const Notes = model('Notes', notesSchema);
+export const Note = model('Note', notesSchema);
