@@ -1,4 +1,4 @@
-import { Notes } from "../models/note";
+import { Notes } from "../models/note.js";
 import createHttpError from "http-errors";
 
 
