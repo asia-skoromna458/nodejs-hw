@@ -23,12 +23,12 @@ export const noteIdSchema = {
 };//notes/:noteId, GET i DELETE
 
 
-export const createNoteSchema = Joi.object({
+export const createNoteSchema = {[Segments.BODY]: Joi.object({
   title: Joi.string().min(1).required(),
   content: Joi.string().allow(''),
   tag: Joi.string().valid(...TAGS),
 
-});//POST /notes
+})};//POST /notes
 
 export const updateNoteSchema = {
   [Segments.PARAMS]: Joi.object({
