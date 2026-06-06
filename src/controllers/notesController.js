@@ -4,8 +4,36 @@ import createHttpError from "http-errors";
 
 
 export const getAllNotes = async (req, res) => {
-  const note = await Note.find();
-  res.status(200).json(note);
+  const { page = 1, perPage = 10, tag, search } = req.query;
+  const myQuery = Note.find();
+  if (tag) {
+    myQuery.where("tag").equals(tag);
+  }
+  if (search) {
+    myQuery.where({
+  $or: [
+    { title: { $regex: search, $options: 'i' } },
+    { content: { $regex: search, $options: 'i' } },
+  ],
+    });
+  }
+
+  const skip = (page - 1) * perPage;
+  const [notes, totalNotes] = await Promise.all([
+    myQuery.clone().skip(skip).limit(perPage),
+    myQuery.countDocuments()
+  ]);
+
+
+  const totalPages = Math.ceil(totalNotes / perPage);
+  res.status(200).json({
+  page,
+  perPage,
+  totalNotes,
+  totalPages,
+  notes
+}
+);
 };//повертає всі нотатки GET
 
 export const getNoteById = async(req,res) => {

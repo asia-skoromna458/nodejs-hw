@@ -7,6 +7,7 @@ import { notFoundHandler } from "./middleware/notFoundHandler.js";
 import { logger } from "./middleware/logger.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 import notesRoutes from './routes/notesRoutes.js';
+import { errors } from "celebrate";
 
 
 app.use(logger);
@@ -18,7 +19,7 @@ const PORT = process.env.PORT ?? 3000;
 app.use(notesRoutes);//маршрути з get i getbyid
 
 app.use(notFoundHandler);//404
-
+app.use(errors());
 app.use(errorHandler);//для помилок
 
 await connectMongoDB();//MongoDB
