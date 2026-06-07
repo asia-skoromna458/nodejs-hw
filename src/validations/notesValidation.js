@@ -32,7 +32,7 @@ export const createNoteSchema = {[Segments.BODY]: Joi.object({
 
 export const updateNoteSchema = {
   [Segments.PARAMS]: Joi.object({
-    noteId: Joi.string().custom(objectValidator),
+    noteId: Joi.string().custom(objectValidator).required(),
   }),
   [Segments.BODY]: Joi.object({
         title: Joi.string().min(1),
