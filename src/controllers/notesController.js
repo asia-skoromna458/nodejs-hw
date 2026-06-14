@@ -5,7 +5,7 @@ import createHttpError from "http-errors";
 
 export const getAllNotes = async (req, res) => {
   const { page = 1, perPage = 10, tag, search } = req.query;
-  const myQuery = Note.find();
+  const myQuery = Note.find({userId: req.user._id});
   if (tag) {
     myQuery.where("tag").equals(tag);
   }
@@ -21,9 +21,8 @@ export const getAllNotes = async (req, res) => {
   const skip = (page - 1) * perPage;
   const [notes, totalNotes] = await Promise.all([
     myQuery.clone().skip(skip).limit(perPage),
-    myQuery.countDocuments()
+    myQuery.clone().countDocuments()
   ]);
-
 
   const totalPages = Math.ceil(totalNotes / perPage);
   res.status(200).json({
@@ -38,7 +37,7 @@ export const getAllNotes = async (req, res) => {
 
 export const getNoteById = async(req,res) => {
   const { noteId } = req.params;
-  const note = await Note.findOne({ _id: noteId });
+  const note = await Note.findOne({ _id: noteId, userId: req.user._id });
 
   if (!note) {
     throw createHttpError(404, 'Note not found');
@@ -47,13 +46,14 @@ export const getNoteById = async(req,res) => {
 };//повертає одну нотатку GET
 
 export const createNote = async (req, res) => {
-  const note = await Note.create(req.body);
+  const note = await Note.create({ ...req.body, userId: req.user._id, });
+
   res.status(201).json(note);
 };//створення нотатки POST
 
 export const deleteNote = async (req, res) => {
   const { noteId } = req.params;
-  const note = await Note.findOneAndDelete({ _id: noteId, });
+  const note = await Note.findOneAndDelete({ _id: noteId, userId:req.user._id });
   if (!note) {
     throw createHttpError(404, 'Note not found');
 
@@ -64,8 +64,8 @@ export const deleteNote = async (req, res) => {
 
 export const updateNote = async (req, res) => {
   const { noteId } = req.params;
-  const note = await Note.findByIdAndUpdate(
-    noteId,
+  const note = await Note.findOneAndUpdate(
+    {_id: noteId, userId:req.user._id },
     req.body,
     { returnDocument: "after" },
   );
@@ -74,3 +74,5 @@ export const updateNote = async (req, res) => {
   }
   res.status(200).json(note);
 };//оновлення PATCH
+
+
