@@ -8,12 +8,15 @@ import { logger } from "./middleware/logger.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 import notesRoutes from './routes/notesRoutes.js';
 import { errors } from "celebrate";
+import cookieParser from "cookie-parser";
+import authRouter from "./routes/authRoutes.js";
 
 
 app.use(logger);
 app.use(express.json()); //це мідлвар/розпаковка запиту в боді
 app.use(cors()); //можна робити запити з будь яких джерел
-
+app.use(cookieParser());
+app.use("/auth", authRouter);
 const PORT = process.env.PORT ?? 3000;
 
 app.use(notesRoutes);//маршрути з get i getbyid
