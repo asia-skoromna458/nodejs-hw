@@ -1,5 +1,6 @@
 import { model, Schema } from "mongoose";
 
+
 const userSchema = new Schema({
   username: {
     type: String,
@@ -17,6 +18,11 @@ const userSchema = new Schema({
     required: true,
     minlength: 8
   },
+  awatar: {
+    type: String,
+    required: false,
+    default:"https://ac.goit.global/fullstack/react/default-avatar.jpg",
+  },
 },
   {
     timestamps: true
@@ -32,7 +38,7 @@ userSchema.methods.toJSON = function () {
 userSchema.pre('save', async function () {
   if (!this.username) {
     this.username = this.email;
-}
+  }
 });
 
 

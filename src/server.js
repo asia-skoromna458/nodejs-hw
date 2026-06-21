@@ -10,6 +10,7 @@ import notesRoutes from './routes/notesRoutes.js';
 import { errors } from "celebrate";
 import cookieParser from "cookie-parser";
 import authRouter from "./routes/authRoutes.js";
+import userRoutes from './routes/userRoutes.js';
 
 
 app.use(logger);
@@ -17,6 +18,7 @@ app.use(express.json()); //це мідлвар/розпаковка запиту
 app.use(cors()); //можна робити запити з будь яких джерел
 app.use(cookieParser());
 app.use("/auth", authRouter);
+app.use('/users', userRoutes);
 const PORT = process.env.PORT ?? 3000;
 
 app.use(notesRoutes);//маршрути з get i getbyid
